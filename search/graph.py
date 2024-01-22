@@ -1,3 +1,4 @@
+from queue import Queue
 import networkx as nx
 
 class Graph:
@@ -21,7 +22,32 @@ class Graph:
         * If there is an end node input and a path does not exist, return None
 
         """
-        return
+        # scaffold code provided in slides
+        Q=Queue()
+        visited=[]
+        Q.put(start)
+        visited.append(start)
+        while Q.not_empty():
+            v=Q.get()
+            N=[n for n in self.graph.successors(v)] # get set of out neighbors since we are given a directed graph 
+            for w in N:
+
+                # check if the neighbor node is the end
+                if (w==end):
+                    distance, shortest_path=nx.single_source_dijkstra(self.graph, start, end) # if w is the end node, then compute the shortest path using the networkx function
+                    return shortest_path # list of nodes for the shortest path from start to end
+
+                if w not in visited:
+                    visited.append(w)
+                    Q.put(w)
+                    
+        # if the end node is not specificed, return the BFS traversal list
+        if (end==None):
+            return visited
+        else:
+            return None # if the end node is not None, but a path does not exist between start and end, return None
+
+        # return
 
 
 

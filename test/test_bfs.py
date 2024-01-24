@@ -1,6 +1,5 @@
 # write tests for bfs
 from logging import warning
-from types import NoneType
 import warnings
 from warnings import WarningMessage
 import pytest
@@ -62,7 +61,7 @@ def test_bfs():
     g=Graph(fn)
     with warnings.catch_warnings() as record:
         g.bfs("Luke Gilbert")
-    assert type(record)==NoneType
+    assert record==None
 
     ################################################################### FOR LARGE GRAPH ###################################################################
 

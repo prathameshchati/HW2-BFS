@@ -18,6 +18,10 @@ class Graph:
         if len(self.graph.nodes())==0:
             raise ValueError("Empty graph was provided, please make sure that the input graph has at least one node.")
 
+        # raise warning if the graph has only a single node
+        if len(self.graph.nodes())==1:
+            warnings.warn("Grpah only has 1 node - all search solutions will return this single node.")
+
     # simple function to get the nodes of the graph
     def get_nodes(self):
         return list(self.graph.nodes())
@@ -40,13 +44,23 @@ class Graph:
             if not self.graph.has_node(end):
                 raise KeyError("The ending node provided is not in the graph. Please try another node.")
 
-        # check if graph is connected; first convert to undirected graph, if graph contains unconnected regions, raise a warning but keep running the program
-        self.undirected_graph=nx.to_undirected(self.graph)
-        # if not (nx.is_connected(self.undirected_graph)):
+        # check if graph is connected; if graph contains unconnected regions, raise a warning but keep running the program
+
+        # strong connections respect directionality
         if not (nx.is_strongly_connected(self.graph)):
-            # print('WARNING')
-            # raise Warning("The graph you have provided is not connected. BFS will be run on all the nodes that are within the connected component of the provided starting node.")
-            warnings.warn("The graph you have provided is not connected. BFS will be run on all the nodes that are within the connected component of the provided starting node.")
+            warnings.warn("The graph you have provided is not strongly connected. BFS will be run on all the nodes that are within the connected component of the provided starting node.")
+
+        # undirected graphs represent connectivity in general
+        self.undirected_graph=nx.to_undirected(self.graph)
+        if not (nx.is_connected(self.undirected_graph)):
+            warnings.warn("The graph you have provided is not fully connected - there are disconnected subpoints. BFS will be run on all the nodes that are within the connected component of the provided starting node.")
+
+        # check if start and end node are the same
+        if (start==end):
+            raise KeyError("The starting and ending nodes are the same. Please make sure they are different.") 
+
+        if len(self.graph.nodes())==1:
+            return self.graph.nodes()
 
         # scaffold code provided in slides
         Q=Queue()
@@ -77,36 +91,3 @@ class Graph:
             return None # if the end node is not None, but a path does not exist between start and end, return None
 
         # return
-
-    # networkx version of bfs to check bfs traversal written above
-    def networkx_bfs(self, start):
-        return
-
-
-    def networkx_shortest_path(self, start, end=None):
-        return
-
-
-# TEST SINGLE AND DOUBLE NODE GRAPHS
-
-
-# TESTING
-# g=Graph("data/class_example_graph.adjlist")
-# print(g.bfs("A"))
-# print(g.bfs("A", "H"))
-
-# g=Graph("data/tiny_network.adjlist")
-# g.get_nodes()
-# g.bfs('Luke Gilbert')
-
-# g=Graph("data/citation_network.adjlist")
-# g.bfs('Luke Gilbert')
-
-# g=Graph("data/class_example_graph_no_path_case.adjlist")
-# print(g.bfs("A"))
-# print(g.bfs("A", "I"))
-
-# g=Graph("data/empty_graph.adjlist")
-
-
-# g.bfs("")

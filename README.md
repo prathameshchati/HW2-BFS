@@ -8,6 +8,10 @@ The purpose of this assignment is to get you comfortable working with graph stru
 
 # Assignment Tasks
 
+## Method Description
+
+Used scaffold code provided to create BFS function using the queue data structure. Tested edge cases include accounting for empty graph, unconnected graphs (both strong and weak), single node graphs, and non-existant start or end nodes. Warnings are thrown when an edge case may result in a trivial solution to avoid stopping the run with an exception - such as a single-node graph. All functionalities are tested with pytest and are in test/test_bfs.py. Edge cases have a separate test associated with them.
+
 ## Coding Assessment
 In search/graph.py:
 * Define the function bfs that takes in a graph, start node, and optional node and:
